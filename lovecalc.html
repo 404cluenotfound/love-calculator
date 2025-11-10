@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Love Calculator</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
+    }
+
+    h1 {
+      color: #e91e63;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+      border: 2px solid #e91e63;
+      border-radius: 10px;
+    }
+
+    button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #d81b60;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 22px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💖 Love Calculator 💖</h1>
+    <input type="text" id="name1" placeholder="Enter First Name">
+    <select id="role1">
+      <option value="boy">Boy</option>
+      <option value="girl">Girl</option>
+    </select>
+    <input type="text" id="name2" placeholder="Enter Second Name">
+    <select id="role2">
+      <option value="girl">Girl</option>
+      <option value="boy">Boy</option>
+    </select>
+    <br>
+    <button onclick="calculateLove()">Calculate</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateLove() {
+      let name1 = document.getElementById('name1').value.trim().toLowerCase();
+      let name2 = document.getElementById('name2').value.trim().toLowerCase();
+      let role1 = document.getElementById('role1').value;
+      let role2 = document.getElementById('role2').value;
+
+      if (!name1 || !name2 || role1 === role2) {
+        document.getElementById('result').innerText = "Please enter valid names and roles.";
+        return;
+      }
+
+      let boyName = role1 === "boy" ? name1 : name2;
+      let girlName = role1 === "girl" ? name1 : name2;
+      let combined = boyName + girlName;
+
+      // Build character sequence: boyName letters + unique girlName letters not in boyName
+      let usedChars = new Set();
+      let sequence = [];
+
+      for (let char of boyName) {
+        if (!usedChars.has(char)) {
+          sequence.push(char);
+          usedChars.add(char);
+        }
+      }
+
+      for (let char of girlName) {
+        if (!usedChars.has(char)) {
+          sequence.push(char);
+          usedChars.add(char);
+        }
+      }
+
+      // Count occurrences of each character in combined name
+      let counts = [];
+      for (let char of sequence) {
+        let count = combined.split('').filter(c => c === char).length;
+        counts.push(count);
+      }
+
+      // Reduce counts to 2 digits with middle element moved to end if odd
+      while (counts.length > 2) {
+        let newCounts = [];
+        let len = counts.length;
+        for (let i = 0; i < Math.floor(len / 2); i++) {
+          newCounts.push(counts[i] + counts[len - 1 - i]);
+        }
+        if (len % 2 === 1) {
+          newCounts.push(counts[Math.floor(len / 2)]);
+        }
+        counts = newCounts;
+      }
+
+      let lovePercent = parseInt(counts.join(''));
+      if (lovePercent > 100) lovePercent = lovePercent % 100;
+
+      document.getElementById('result').innerText = `❤️ Love Percentage: ${lovePercent}% ❤️`;
+    }
+  </script>
+</body>
+</html>
