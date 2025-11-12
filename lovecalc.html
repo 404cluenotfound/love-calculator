@@ -93,7 +93,6 @@
       let girlName = role1 === "girl" ? name1 : name2;
       let combined = boyName + girlName;
 
-      // Build character sequence: boyName letters + unique girlName letters not in boyName
       let usedChars = new Set();
       let sequence = [];
 
@@ -111,14 +110,13 @@
         }
       }
 
-      // Count occurrences of each character in combined name
       let counts = [];
       for (let char of sequence) {
         let count = combined.split('').filter(c => c === char).length;
         counts.push(count);
       }
 
-      // Reduce counts to 2 digits with middle element moved to end if odd
+      // Full reduction loop with middle element moved to end if odd
       while (counts.length > 2) {
         let newCounts = [];
         let len = counts.length;
@@ -126,13 +124,15 @@
           newCounts.push(counts[i] + counts[len - 1 - i]);
         }
         if (len % 2 === 1) {
-          newCounts.push(counts[Math.floor(len / 2)]);
+          let middle = counts[Math.floor(len / 2)];
+          newCounts.push(middle); // move middle to end
         }
         counts = newCounts;
       }
 
       let lovePercent = parseInt(counts.join(''));
-      if (lovePercent > 100) lovePercent = lovePercent % 100;
+      lovePercent = lovePercent % 100;
+      if (lovePercent < 10) lovePercent += 10;
 
       document.getElementById('result').innerText = `❤️ Love Percentage: ${lovePercent}% ❤️`;
     }
