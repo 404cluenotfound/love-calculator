@@ -401,8 +401,7 @@
       if (lovePercent < 10) lovePercent += 10;
 
       resultEl.innerHTML = `❤️ Love Percentage: <span class="percent">${lovePercent}%</span> ❤️`;
-      resultEl.classList.remove("show");
-      // small timeout to retrigger fade animation
+      resultEl.classList.remove("show");
       void resultEl.offsetWidth;
       resultEl.classList.add("show");
     }
